@@ -97,5 +97,3 @@ def create_fleet(ai_settings, screen, aliens):
     # Utworzenie pierwszego rzędu obcych
     for alien_number in range(number_aliens_x):
         create_alien(ai_settings, screen, aliens, alien_number)
-        print(alien_number)
-    print("number_aliens_x: ", number_aliens_x)
