@@ -79,21 +79,38 @@ def get_number_aliens_x(ai_settings, alien_width):
     return number_aliens_x
 
 
-def create_alien(ai_settings, screen, aliens, alien_number):
+def get_number_rows(ai_settings, ship_height, alien_height):
+    """Funkcja odpowiedzialna za ustalenie ile rzędów obych zmieści się na ekranie"""
+    # Ustalenie dostępnego miejsca - wysokość ekranu - wysokość 3 obcych -  wysokość statku gracza
+    available_space_y = ai_settings.screen_height - (3 * alien_height) - ship_height
+
+    # Ilość rzędów to ilość dostępnego miejsca podzielona przez dwukrotną wysokość statku, wliczono odstęp o wartości
+    # wysokości jednego obcego
+    number_rows = int(available_space_y / (2 * alien_height))
+
+    return number_rows
+
+
+def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     # Utworzenie obcego i ustalenie liczby obcych, którzy zmieszczą się w rzędzie.
     # Odległość między poszczególnymi obcymi jest równa szerokości obcego
     alien = Alien(ai_settings, screen)
     alien_width = alien.rect.width
     alien.x = alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.x
+    # Zmieniamy wartość współrzędnej Y obcego tak aby znajdował się w odległości jednego obcego od górnej krawędzi
+    # ekranu, a każdy rząd rozpoczynał się dwie wysokości obcego poniżej poprzedniego rzędu:
+    #  2 * wysokość obcego * row_number
+    alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
     aliens.add(alien)
 
 
-def create_fleet(ai_settings, screen, aliens):
+def create_fleet(ai_settings, screen, ship, aliens):
     """Funkcja odpowiedzialna z autworzenie floty obcych"""
     alien = Alien(ai_settings, screen)  # Utworzenie obcego
     number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)  # Sprawdzenie ilu obcych zmieści się w rzędzie
+    number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)  # Ustalenie ile rzędów dla obcych
 
-    # Utworzenie pierwszego rzędu obcych
-    for alien_number in range(number_aliens_x):
-        create_alien(ai_settings, screen, aliens, alien_number)
+    for row_number in range(number_rows):
+        for alien_number in range(number_aliens_x):
+            create_alien(ai_settings, screen, aliens, alien_number, row_number)

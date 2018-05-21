@@ -4,7 +4,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
-from game_functions import check_events, update_screen, update_bullets, create_fleet
+from game_functions import check_events, update_screen, update_bullets, create_fleet, get_number_rows
 
 
 def run_game():
@@ -18,7 +18,7 @@ def run_game():
     ship = Ship(screen, ai_settings)  # Tworzymy obiekt klasy Ship()
     bullets = Group()  # Grupa przeznaczona do przechowywania pocisków
     aliens = Group()  # Grupa przeznaczona do przechowywania obcych
-    create_fleet(ai_settings, screen, aliens)  # Utworzenie floty obcych
+    create_fleet(ai_settings, screen, ship, aliens)  # Utworzenie floty obcych
 
     # Rozpoczęcie głównej pętli gry.
     while True:
