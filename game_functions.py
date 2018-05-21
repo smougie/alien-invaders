@@ -59,32 +59,43 @@ def update_bullets(bullets):
         if bullet.rect.bottom <= 0:  # Jeżeli dolna krawędź bullet <= 0
             bullets.remove(bullet)
 
+
 def fire_bullet(bullets, ai_settings, screen, ship):
     """Funkcja odpowiedzialna za wystrzelenie pocisku jeżeli nie przekroczono określonego limitu"""
     if len(bullets) < ai_settings.bullets_allowed:  # Ograniczenie ilości posiadanych pocisków do 3
         new_bullet = Bullet(ai_settings, screen, ship)  # W zmiennej tworzy nowy obiekt klasy Bullet()
         bullets.add(new_bullet)  # Dodaje stworzony obiekt do grupy pocisków bullets
 
-def create_fleet(ai_settings, screen, ship, bullets, aliens):
-    """Utworzenie floty obcych"""
 
+def get_number_aliens_x(ai_settings, alien_width):
+    """Funkcja odpowiedzialna za obliczenia pola przeznaczonego do wyświetlania obcych, szerokość ekranu odjąć margines
+    z lewej i margines z prawej które wynoszą szerokość obcego z każdej strony"""
+    available_space_x = ai_settings.screen_width - (2 * alien_width)  # 1080
+
+    # Ilość obcych znajdujących się w obszarze available_space_x wynosi pole wyznaczone do wyświetlenia podzielone przez
+    # szerokość statków razy dwa, każdy statek musi mieć odstęp jednego statku
+    number_aliens_x = int(available_space_x / (2 * alien_width))  # 9
+
+    return number_aliens_x
+
+
+def create_alien(ai_settings, screen, aliens, alien_number):
     # Utworzenie obcego i ustalenie liczby obcych, którzy zmieszczą się w rzędzie.
     # Odległość między poszczególnymi obcymi jest równa szerokości obcego
     alien = Alien(ai_settings, screen)
     alien_width = alien.rect.width
+    alien.x = alien_width + 2 * alien_width * alien_number
+    alien.rect.x = alien.x
+    aliens.add(alien)
 
-    # Pole przeznaczone do wyświetlania obcych, szerokość ekranu odjąć margines z lewej i margines z prawej które
-    # wynoszą szerokość obcego z każdej strony
-    available_space_x = ai_settings.screen_width - (2 * alien_width)  # 1080
 
-    # Ilość obcych znajdujących się w obszarze available_space_x wynosi pole wyznaczone do wyświetlenia podzielone przez
-    # szerokość statków razy dwa, kazdy statek musi mieć odstęp jednego statku
-    number_aliens_x = int(available_space_x / (2 * alien_width))  # 9
+def create_fleet(ai_settings, screen, aliens):
+    """Funkcja odpowiedzialna z autworzenie floty obcych"""
+    alien = Alien(ai_settings, screen)  # Utworzenie obcego
+    number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)  # Sprawdzenie ilu obcych zmieści się w rzędzie
 
     # Utworzenie pierwszego rzędu obcych
     for alien_number in range(number_aliens_x):
-        # Utworzenie obcego i umieszczenie go w rzędzie
-        alien = Alien(ai_settings, screen)
-        alien.x = alien_width + 2 * alien_width * alien_number
-        alien.rect.x = alien.x
-        aliens.add(alien)
+        create_alien(ai_settings, screen, aliens, alien_number)
+        print(alien_number)
+    print("number_aliens_x: ", number_aliens_x)

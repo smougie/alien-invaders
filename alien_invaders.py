@@ -18,8 +18,7 @@ def run_game():
     ship = Ship(screen, ai_settings)  # Tworzymy obiekt klasy Ship()
     bullets = Group()  # Grupa przeznaczona do przechowywania pocisków
     aliens = Group()  # Grupa przeznaczona do przechowywania obcych
-
-    create_fleet(ai_settings, screen, ship, bullets, aliens)
+    create_fleet(ai_settings, screen, aliens)  # Utworzenie floty obcych
 
     # Rozpoczęcie głównej pętli gry.
     while True:
