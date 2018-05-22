@@ -55,9 +55,13 @@ def update_alien(aliens):
     aliens.update()
 
 
-def update_bullets(bullets):
+def update_bullets(bullets, aliens):
     """Uaktualnienie pocisków."""
     bullets.update()  # Wywołanie metody update dla grupy bullets wywołuje update dla każdego sprite'a w grupie
+    # Powoduje przeprowadzenie iteracji przez wszystkie pociski oraz przez wszystkich obcych, jeżeli funkcja wykryje
+    # kolizję, któregokolwiek z elementów bullets lub aliens to dzięki kolejnym argumentom ustawionym na True, usunie
+    # element z bullet i alien, jeżeli ustawimy argument na False, element nie zostanie usunięty
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     # Usunięcie pocisków znajdujących się poza ekranem - y <= 0
     for bullet in bullets.copy():  # Wewnątrz pętli for nie należy usuwać elementów listy dlatego używamy copy()
