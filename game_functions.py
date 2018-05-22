@@ -50,8 +50,13 @@ def update_screen(ai_settings, screen, ship, bullets, aliens):
     pygame.display.flip()  # Wyświetlenie ostatnio zmodyfikowanego ekranu - odświeżanie
 
 
+def update_alien(aliens):
+    """Uaktualnienie położenia każdego obcego."""
+    aliens.update()
+
+
 def update_bullets(bullets):
-    """Uaktualnienie pocisków"""
+    """Uaktualnienie pocisków."""
     bullets.update()  # Wywołanie metody update dla grupy bullets wywołuje update dla każdego sprite'a w grupie
 
     # Usunięcie pocisków znajdujących się poza ekranem - y <= 0
@@ -61,7 +66,7 @@ def update_bullets(bullets):
 
 
 def fire_bullet(bullets, ai_settings, screen, ship):
-    """Funkcja odpowiedzialna za wystrzelenie pocisku jeżeli nie przekroczono określonego limitu"""
+    """Funkcja odpowiedzialna za wystrzelenie pocisku jeżeli nie przekroczono określonego limitu."""
     if len(bullets) < ai_settings.bullets_allowed:  # Ograniczenie ilości posiadanych pocisków do 3
         new_bullet = Bullet(ai_settings, screen, ship)  # W zmiennej tworzy nowy obiekt klasy Bullet()
         bullets.add(new_bullet)  # Dodaje stworzony obiekt do grupy pocisków bullets
@@ -69,7 +74,7 @@ def fire_bullet(bullets, ai_settings, screen, ship):
 
 def get_number_aliens_x(ai_settings, alien_width):
     """Funkcja odpowiedzialna za obliczenia pola przeznaczonego do wyświetlania obcych, szerokość ekranu odjąć margines
-    z lewej i margines z prawej które wynoszą szerokość obcego z każdej strony"""
+    z lewej i margines z prawej które wynoszą szerokość obcego z każdej strony."""
     available_space_x = ai_settings.screen_width - (2 * alien_width)  # 1080
 
     # Ilość obcych znajdujących się w obszarze available_space_x wynosi pole wyznaczone do wyświetlenia podzielone przez
@@ -80,7 +85,7 @@ def get_number_aliens_x(ai_settings, alien_width):
 
 
 def get_number_rows(ai_settings, ship_height, alien_height):
-    """Funkcja odpowiedzialna za ustalenie ile rzędów obych zmieści się na ekranie"""
+    """Funkcja odpowiedzialna za ustalenie ile rzędów obych zmieści się na ekranie."""
     # Ustalenie dostępnego miejsca - wysokość ekranu - wysokość 3 obcych -  wysokość statku gracza
     available_space_y = ai_settings.screen_height - (3 * alien_height) - ship_height
 
@@ -106,7 +111,7 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
 
 
 def create_fleet(ai_settings, screen, ship, aliens):
-    """Funkcja odpowiedzialna z autworzenie floty obcych"""
+    """Funkcja odpowiedzialna z autworzenie floty obcych."""
     alien = Alien(ai_settings, screen)  # Utworzenie obcego
     number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)  # Sprawdzenie ilu obcych zmieści się w rzędzie
     number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)  # Ustalenie ile rzędów dla obcych
@@ -114,3 +119,21 @@ def create_fleet(ai_settings, screen, ship, aliens):
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):
             create_alien(ai_settings, screen, aliens, alien_number, row_number)
+
+def check_fleet_edges(ai_settings, aliens):
+    """Odpowiednia reakcja na to kiedy obcy dotrze do krawędzi ekanu."""
+    for alien in aliens.sprites():
+        if alien.check_edges():  # Jeżeli któryś obcy znajdzię się przy prawej krawędzi ekranu trzeba zmienić direction
+            change_fleet_direction(ai_settings, aliens)
+            break
+
+def change_fleet_direction(ai_settings, aliens):
+    """Przesunięcie całej floty w dół i zmiana kierunku, w którym się prousza"""
+    for alien in aliens.sprites():
+        alien.rect.y += ai_settings.fleet_drop_speed
+    ai_settings.fleet_direction *= -1
+
+def update_aliens(ai_settings, aliens):
+    """Sprawdzenie czy flota znajduje się przy krwędzi ekranu, a następnie uaktualnienie położenia wszystkich obcych"""
+    check_fleet_edges(ai_settings, aliens)
+    aliens.update()

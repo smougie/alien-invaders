@@ -25,3 +25,19 @@ class Alien(Sprite):
     def blitme(self):
         """Wyświetlenie obcego w jego aktualnym położeniu"""
         self.screen.blit(self.image, self.rect)
+
+    def check_edges(self):
+        """Zwraca wartość True, jeżeli obcy znajduje się przy krawędzi ekranu."""
+        screen_rect = self.screen.get_rect()  # Zapisujemy w zmiennej wartość kwadratu okna
+        if self.rect.right >= screen_rect.right:  # Sprawdzamy czy prawa krawędz prostokąta obcego jest >=
+                                                  # prawej krawędzi ekranu
+            return True
+        elif self.rect.left <= 0:  # Sprawdzamy czy lewa krawędz obcego jest <= wartości 0 oznaczającej lewą krawędź
+                                   # ekranu
+            return True
+
+    def update(self):
+        """Przesunięcie obcego w lewo lub w prawo - jeżeli wartością fleed_direction jest 1(prawo) to speed_factor
+           zostanie dodany do X. Jeżeli wartością fleet_direction jest -1(lewo) to speed_factor zostanie odjęty od X."""
+        self.x += (self.ai_settings.alien_speed_factor * self.ai_settings.fleet_direction)
+        self.rect.x = self.x

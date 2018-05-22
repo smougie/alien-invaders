@@ -4,7 +4,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
-from game_functions import check_events, update_screen, update_bullets, create_fleet, get_number_rows
+from game_functions import check_events, update_screen, update_bullets, create_fleet, update_aliens
 
 
 def run_game():
@@ -27,6 +27,7 @@ def run_game():
         check_events(ai_settings, screen, ship, bullets)  # Nasłuchuje zdarzeń (eventów)
         ship.update()  # Uaktualnia położenie statku
         update_bullets(bullets)  # Uaktualnia pociski oraz usuwa pociski znajdujące się poza ekranem
+        update_aliens(ai_settings, aliens)  # Uaktualnie flotę obcych, ustala położenie oraz kierunek poruszania
         update_screen(ai_settings, screen, ship, bullets, aliens)  # Uaktualnienie obrazów i przejście do nowego ekranu
 
 
