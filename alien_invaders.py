@@ -26,7 +26,9 @@ def run_game():
         # Moduły odpowiedzialne za odświeżanie ekranu po każdej iteracji pętli.
         check_events(ai_settings, screen, ship, bullets)  # Nasłuchuje zdarzeń (eventów)
         ship.update()  # Uaktualnia położenie statku
-        update_bullets(bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące się poza ekranem
+        update_bullets(ai_settings, screen, ship,bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące
+                                                                   # się poza ekranem, odpowiada za utworzenie nowej
+                                                                   # nowej floty po zniszczeniu wszystkich obcych
         update_aliens(ai_settings, aliens)  # Uaktualnie flotę obcych, ustala położenie oraz kierunek poruszania
         update_screen(ai_settings, screen, ship, bullets, aliens)  # Uaktualnienie obrazów i przejście do nowego ekranu
 
