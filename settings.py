@@ -13,7 +13,7 @@ class Settings():
         self.ship_speed_factor = 1.5
 
         # Ustawienia pocisku
-        self.bullet_speed_factor = 1
+        self.bullet_speed_factor = 3
         self.bullet_width = 10
         self.bullet_height = 18
         self.bullet_color = 60, 60, 60

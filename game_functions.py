@@ -62,7 +62,7 @@ def update_bullets(ai_settings, screen, ship, bullets, aliens):
        funkcja wykryje kolizję, któregokolwiek z elementów bullets lub aliens to dzięki kolejnym argumentom ustawionym
        na True, usunie element z bullet i alien, jeżeli ustawimy argument na False, element nie zostanie usunięty"""
     bullets.update()
-    collisions = pygame.sprite.groupcollide(bullets, aliens, False, True)
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
