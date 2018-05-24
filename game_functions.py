@@ -56,22 +56,29 @@ def update_alien(aliens):
 
 
 def update_bullets(ai_settings, screen, ship, bullets, aliens):
-    """Uaktualnienie pocisków.
+    """Uaktualnienie pocisków."""
+    bullets.update()
+
+    # Usunięcie pocisków znajdujących się poza ekranem - y <= 0
+    for bullet in bullets.copy():  # Wewnątrz pętli for nie należy usuwać elementów listy dlatego używamy copy()
+        if bullet.rect.bottom <= 0:  # Jeżeli dolna krawędź bullet <= 0
+            bullets.remove(bullet)
+
+    check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens)
+
+
+def check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens):
+    '''Reakcja na kolizję pocisku z obcym.
        Wywołanie metody update dla grupy bullets wywołuje update dla każdego sprite'a w grupie.
        collisions - powoduje przeprowadzenie iteracji przez wszystkie pociski oraz przez wszystkich obcych, jeżeli
        funkcja wykryje kolizję, któregokolwiek z elementów bullets lub aliens to dzięki kolejnym argumentom ustawionym
-       na True, usunie element z bullet i alien, jeżeli ustawimy argument na False, element nie zostanie usunięty"""
-    bullets.update()
+       na True, usunie element z bullet i alien, jeżeli ustawimy argument na False, element nie zostanie usunięty.'''
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
         create_fleet(ai_settings, screen, ship, aliens)  # Tworzymy nową flotę
 
-    # Usunięcie pocisków znajdujących się poza ekranem - y <= 0
-    for bullet in bullets.copy():  # Wewnątrz pętli for nie należy usuwać elementów listy dlatego używamy copy()
-        if bullet.rect.bottom <= 0:  # Jeżeli dolna krawędź bullet <= 0
-            bullets.remove(bullet)
 
 
 def fire_bullet(bullets, ai_settings, screen, ship):
