@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 
 import pygame
 
@@ -149,7 +150,36 @@ def change_fleet_direction(ai_settings, aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
-def update_aliens(ai_settings, aliens):
-    """Sprawdzenie czy flota znajduje się przy krwędzi ekranu, a następnie uaktualnienie położenia wszystkich obcych"""
-    check_fleet_edges(ai_settings, aliens)
-    aliens.update()
+def update_aliens(ai_settings, stats, screen, aliens, ship, bullets):
+    """Sprawdzenie czy flota znajduje się przy bocznej krwędzi ekranu, następnie uaktualnienie położenia wszystkich
+       obcych, sprawdzenie czy obcy nie zderzył się ze statkiem gracza lub z dolną krawędzią ekranu."""
+    check_fleet_edges(ai_settings, aliens)  # Sprawdzenie położenia floty
+    aliens.update()  # Uaktualnienie floty
+    if pygame.sprite.spritecollideany(ship, aliens):  # Wykrywanie kolizji między obcymi a statkiem gracza
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)  # Sprawdzenie czy obcy nie dotarł do dolnej
+    # krawędzi ekranu
+
+
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+    """Reajcha na uderzenie obcego w statek."""
+    stats.ships_left -= 1  # Zmniejszego wartości przechowywanej w ships_left - jedno żytko mniej ;)
+
+    # Usunięcie wszystkich obcych oraz pocisków
+    aliens.empty()
+    bullets.empty()
+
+    # Utworzenie nowej floty i wyśrodkowanie statu
+    create_fleet(ai_settings, screen, ship, aliens)
+    ship.center_ship()
+
+    # Pauza
+    sleep(0.5)
+
+def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+    """Sprawdzenie, czy którykolwiek obcy dotarł do dolnej krawędzi ekranu."""
+    screen_rect = screen.get_rect()
+    for alien in aliens:
+        if alien.rect.bottom >= screen_rect.bottom:
+            ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+            break

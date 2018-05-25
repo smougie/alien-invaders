@@ -3,6 +3,7 @@ from pygame.sprite import Group
 
 
 from settings import Settings
+from game_stats import GameStats
 from ship import Ship
 from game_functions import check_events, update_screen, update_bullets, create_fleet, update_aliens
 
@@ -15,6 +16,7 @@ def run_game():
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))  # Rozdzielczość ekranu
     pygame.display.set_caption('Alien Invaders')  # Nazwa okna
 
+    stats = GameStats(ai_settings)  # Utworzenie obiekt klasy GameStats do przechowywania danych statystycznych gry
     ship = Ship(screen, ai_settings)  # Tworzymy obiekt klasy Ship()
     bullets = Group()  # Grupa przeznaczona do przechowywania pocisków
     aliens = Group()  # Grupa przeznaczona do przechowywania obcych
@@ -26,10 +28,11 @@ def run_game():
         # Moduły odpowiedzialne za odświeżanie ekranu po każdej iteracji pętli.
         check_events(ai_settings, screen, ship, bullets)  # Nasłuchuje zdarzeń (eventów)
         ship.update()  # Uaktualnia położenie statku
-        update_bullets(ai_settings, screen, ship,bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące
-                                                                   # się poza ekranem, odpowiada za utworzenie nowej
-                                                                   # nowej floty po zniszczeniu wszystkich obcych
-        update_aliens(ai_settings, aliens)  # Uaktualnie flotę obcych, ustala położenie oraz kierunek poruszania
+        update_bullets(ai_settings, screen, ship, bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące
+        # się poza ekranem, odpowiada za utworzenie nowej nowej floty po zniszczeniu wszystkich obcych
+
+        update_aliens(ai_settings, stats, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
+        # oraz kierunek poruszania
         update_screen(ai_settings, screen, ship, bullets, aliens)  # Uaktualnienie obrazów i przejście do nowego ekranu
 
 
