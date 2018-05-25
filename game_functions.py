@@ -163,18 +163,21 @@ def update_aliens(ai_settings, stats, screen, aliens, ship, bullets):
 
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     """Reajcha na uderzenie obcego w statek."""
-    stats.ships_left -= 1  # Zmniejszego wartości przechowywanej w ships_left - jedno żytko mniej ;)
+    if stats.ships_left > 0:
+        stats.ships_left -= 1  # Zmniejszego wartości przechowywanej w ships_left - jedno żytko mniej ;)
 
-    # Usunięcie wszystkich obcych oraz pocisków
-    aliens.empty()
-    bullets.empty()
+        # Usunięcie wszystkich obcych oraz pocisków
+        aliens.empty()
+        bullets.empty()
 
-    # Utworzenie nowej floty i wyśrodkowanie statu
-    create_fleet(ai_settings, screen, ship, aliens)
-    ship.center_ship()
+        # Utworzenie nowej floty i wyśrodkowanie statu
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
 
-    # Pauza
-    sleep(0.5)
+        # Pauza
+        sleep(0.5)
+    else:
+        stats.game_active = False
 
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     """Sprawdzenie, czy którykolwiek obcy dotarł do dolnej krawędzi ekranu."""
