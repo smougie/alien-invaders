@@ -1,3 +1,6 @@
+import pygame
+
+
 class Settings():
     """Klasa odpowiedzialna do przechowywania wszystkich ustawień gry."""
 

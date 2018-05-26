@@ -3,6 +3,7 @@ from time import sleep
 
 import pygame
 
+import background
 import game_stats
 from alien import Alien
 from bullet import Bullet
@@ -39,9 +40,10 @@ def check_keyup_events(event, ai_settings, screen, ship, bullets):
         ship.moving_left = False  # Zmienia wartość moving_left w obiekcie klasy Ship() na False
 
 
-def update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button):
+def update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button, background):
     """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
     screen.fill(ai_settings.bg_color)  # Wypełnienie tła przy użyciu klasy obiektu klasy Settings()
+    screen.blit(background.image, background.rect)
 
     # Ponowne wyświetlenie wszystkich pocisków pod warstwą ship i aliens
     for bullet in bullets:

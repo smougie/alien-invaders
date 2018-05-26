@@ -1,6 +1,7 @@
 import pygame
 from pygame.sprite import Group
 
+from background import Background
 from button import Button
 from settings import Settings
 from game_stats import GameStats
@@ -16,6 +17,7 @@ def run_game():
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))  # Rozdzielczość ekranu
     pygame.display.set_caption('Alien Invaders')  # Nazwa okna
 
+    background = Background(ai_settings)  # Utworzenie tła
     play_button = Button(ai_settings, screen, 'Gra')  # Utworzenie przycisku Gra na środku ekranu
     stats = GameStats(ai_settings)  # Utworzenie obiekt klasy GameStats do przechowywania danych statystycznych gry
     ship = Ship(screen, ai_settings)  # Tworzymy obiekt klasy Ship()
@@ -36,7 +38,7 @@ def run_game():
             update_aliens(ai_settings, stats, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
             # oraz kierunek poruszania
 
-        update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button)  # Uaktualnienie obrazów i przejście do
+        update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button, background)  # Uaktualnienie obrazów i przejście do
         # nowego ekranu
 
 
