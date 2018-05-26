@@ -5,7 +5,7 @@ class GameStats():
         """Inicjalizacja danych satystycznych."""
         self.ai_settings = ai_settings
         self.reset_stats()
-        self.game_active = True
+        self.game_active = False  # Uruchamiamy grę w stanie nieakwtywnym
 
     def reset_stats(self):
         """Inicjalizacja danych statystyczncyh, które mogą zmieniać się w trakcie gry."""
