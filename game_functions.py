@@ -9,15 +9,25 @@ from alien import Alien
 from bullet import Bullet
 
 
-def check_events(ai_settings, screen, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, bullets):
     """Funkcja nasłuchuje zdarzeń podczas pętli."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Jeżeli gracz naciśnie X w prawym górnym rogu, następuje zamknięcie okna
             sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # Jeżeli gracz naciśnie przycisk myszki, wykonuje
+            mouse_x,  mouse_y = pygame.mouse.get_pos()  # Sprawdzenie pozycji x, y kursora
+            check_play_buttons(stats, play_button, mouse_x, mouse_y)  # przekazujemy wartości x, y kursora do funckji
         elif event.type == pygame.KEYDOWN:  # Jeżeli zostanie wciśnięty klawisz
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:  # Jeżeli klawisz zostanie zwolniony
             check_keyup_events(event, ai_settings, screen, ship, bullets)
+
+
+def check_play_buttons(stats, play_button, mouse_x, mouse_y):
+    """Rozpoczęcie nowej gry po kliknięciu przycisku - jeżeli funkcja wykryje, kliknięcie kursora w miejscu wyświetlenia
+       przycisku Gra następuje zmiana wartości zmiennej game_active z False na True"""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.game_active = True
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
@@ -51,6 +61,7 @@ def update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button
         screen.blit(bullet.image, bullet.rect)  # Tworzy obiekt wypełniony przez wskazany image
     ship.blitme()  # Wyświetlenie statku na ekranie, "nad" kolorem tła oraz nad pociskami
     aliens.draw(screen)  # Wyświetlenie obcego na ekranie
+    # Sprawdzenie czy gra nie jest aktywny, jeżeli nie jest to wyświetla przycisk Gra
     if not stats.game_active:
         play_button.draw_button()
 

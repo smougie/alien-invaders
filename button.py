@@ -8,8 +8,8 @@ class Button():
 
         # Zdefiniowanie wymiarów i właściwości przycisku
         self.width, self.hight = 200, 50
-        self.button_color = (0, 255, 0)
-        self.text_color = (255, 255, 255)
+        self.button_color = (51, 51, 255)
+        self.text_color = (0, 0, 0)
         self.font = pygame.font.SysFont(None, 48)
 
         # Utworzenie prostokąta przycisku i wyśrodkowanie go
