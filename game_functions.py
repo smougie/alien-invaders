@@ -9,25 +9,35 @@ from alien import Alien
 from bullet import Bullet
 
 
-def check_events(ai_settings, screen, stats, play_button, ship, bullets):
+def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
     """Funkcja nasłuchuje zdarzeń podczas pętli."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Jeżeli gracz naciśnie X w prawym górnym rogu, następuje zamknięcie okna
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:  # Jeżeli gracz naciśnie przycisk myszki, wykonuje
             mouse_x,  mouse_y = pygame.mouse.get_pos()  # Sprawdzenie pozycji x, y kursora
-            check_play_buttons(stats, play_button, mouse_x, mouse_y)  # przekazujemy wartości x, y kursora do funckji
+            # Przekazujemy wartości x, y kursora do funckji
+            check_play_buttons(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y)
         elif event.type == pygame.KEYDOWN:  # Jeżeli zostanie wciśnięty klawisz
             check_keydown_events(event, ai_settings, screen, ship, bullets)
         elif event.type == pygame.KEYUP:  # Jeżeli klawisz zostanie zwolniony
             check_keyup_events(event, ai_settings, screen, ship, bullets)
 
 
-def check_play_buttons(stats, play_button, mouse_x, mouse_y):
+def check_play_buttons(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Rozpoczęcie nowej gry po kliknięciu przycisku - jeżeli funkcja wykryje, kliknięcie kursora w miejscu wyświetlenia
        przycisku Gra następuje zmiana wartości zmiennej game_active z False na True"""
     if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.reset_stats()  # Wyzerowanie danych statystycznych gry
         stats.game_active = True
+
+        # Usunięcie zawartości list aliens i bullets
+        aliens.empty()
+        bullets.empty()
+
+        # Utworzenie nowej floty i wyśrodkowanie statku
+        create_fleet(ai_settings, screen, ship, aliens)
+        ship.center_ship()
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):

@@ -29,7 +29,7 @@ def run_game():
     while True:
 
         # Moduły odpowiedzialne za odświeżanie ekranu po każdej iteracji pętli.
-        check_events(ai_settings, screen, stats, play_button, ship, bullets)  # Nasłuchuje zdarzeń (eventów)
+        check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)  # Nasłuchuje zdarzeń (eventów)
         if stats.game_active:
             ship.update()  # Uaktualnia położenie statku
             update_bullets(ai_settings, screen, ship, bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące
