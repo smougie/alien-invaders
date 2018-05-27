@@ -26,8 +26,11 @@ def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)
 
 def check_play_buttons(ai_settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Rozpoczęcie nowej gry po kliknięciu przycisku - jeżeli funkcja wykryje, kliknięcie kursora w miejscu wyświetlenia
-       przycisku Gra następuje zmiana wartości zmiennej game_active z False na True"""
-    if play_button.rect.collidepoint(mouse_x, mouse_y):
+       przycisku Gra oraz obecnie gra jest nieakwywna, następuje zresetowanie danych statystycznych gry ora opróżnienie
+       grup aliens i bullets, następnie zmiana wartości game_active z False na True"""
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)  # Przechowywanie wartości True or False
+    if button_clicked and not stats.game_active:
+        pygame.mouse.set_visible(False)
         stats.reset_stats()  # Wyzerowanie danych statystycznych gry
         stats.game_active = True
 
@@ -205,6 +208,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         sleep(0.5)
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     """Sprawdzenie, czy którykolwiek obcy dotarł do dolnej krawędzi ekranu."""
