@@ -108,6 +108,7 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens):
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
+        ai_settings.increase_speed()  # Przyśpieszenie gry po zestrzeleniu wszystkich obcych
         create_fleet(ai_settings, screen, ship, aliens)  # Tworzymy nową flotę
 
 
@@ -199,6 +200,9 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         # Usunięcie wszystkich obcych oraz pocisków
         aliens.empty()
         bullets.empty()
+
+        # Wyzerowanie ustawień dotyczących gry - wartości prędkości wracają do początkowych
+        ai_settings.initialize_dynamic_settings()
 
         # Utworzenie nowej floty i wyśrodkowanie statu
         create_fleet(ai_settings, screen, ship, aliens)
