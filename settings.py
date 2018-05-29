@@ -27,6 +27,7 @@ class Settings():
         self.alien_speed_factor = 2  # Szybkość z jaką flota będzie się poruszać w lewo i prawo
         self.fleet_drop_speed = 10  # Szybkość z jaką flota będzie się poruszać w dół ekranu
         self.fleet_direction = 1  # Wartość fleet_diection wynosząca 1 oznacza prawo natomiast -1 oznacze lewo
+        self.alien_points = 50  # Punktacja za zestrzelonego obcego
 
         # Zmiana prędkości gry
         self.speedup_scale = 1.1

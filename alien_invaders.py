@@ -34,8 +34,9 @@ def run_game():
         check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets)  # Nasłuchuje zdarzeń (eventów)
         if stats.game_active:
             ship.update()  # Uaktualnia położenie statku
-            update_bullets(ai_settings, screen, ship, bullets, aliens)  # Uaktualnia pociski oraz usuwa pociski znajdujące
-            # się poza ekranem, odpowiada za utworzenie nowej nowej floty po zniszczeniu wszystkich obcych
+            update_bullets(ai_settings, screen, stats, scoreboard, ship, bullets, aliens)  # Uaktualnia pociski oraz
+            # usuwa pociski znajdujące się poza ekranem, odpowiada za utworzenie nowej nowej floty po zniszczeniu
+            # wszystkich obcych
 
             update_aliens(ai_settings, stats, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
             # oraz kierunek poruszania

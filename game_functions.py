@@ -87,7 +87,7 @@ def update_alien(aliens):
     aliens.update()
 
 
-def update_bullets(ai_settings, screen, ship, bullets, aliens):
+def update_bullets(ai_settings, screen, stats, scoreboard, ship, bullets, aliens):
     """Uaktualnienie pocisków."""
     bullets.update()
 
@@ -96,16 +96,20 @@ def update_bullets(ai_settings, screen, ship, bullets, aliens):
         if bullet.rect.bottom <= 0:  # Jeżeli dolna krawędź bullet <= 0
             bullets.remove(bullet)
 
-    check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens)
+    check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, bullets, aliens)
 
 
-def check_bullet_alien_collisions(ai_settings, screen, ship, bullets, aliens):
+def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, bullets, aliens):
     '''Reakcja na kolizję pocisku z obcym.
        Wywołanie metody update dla grupy bullets wywołuje update dla każdego sprite'a w grupie.
        collisions - powoduje przeprowadzenie iteracji przez wszystkie pociski oraz przez wszystkich obcych, jeżeli
        funkcja wykryje kolizję, któregokolwiek z elementów bullets lub aliens to dzięki kolejnym argumentom ustawionym
        na True, usunie element z bullet i alien, jeżeli ustawimy argument na False, element nie zostanie usunięty.'''
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+
+    if collisions:
+        stats.score += ai_settings.alien_points
+        scoreboard.prep_score()
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
