@@ -63,7 +63,7 @@ def check_keyup_events(event, ai_settings, screen, ship, bullets):
         ship.moving_left = False  # Zmienia wartość moving_left w obiekcie klasy Ship() na False
 
 
-def update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button, background):
+def update_screen(ai_settings, screen, stats, scoreboard, ship, bullets, aliens, play_button, background):
     """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
     screen.fill(ai_settings.bg_color)  # Wypełnienie tła przy użyciu klasy obiektu klasy Settings()
     screen.blit(background.image, background.rect)
@@ -74,6 +74,7 @@ def update_screen(ai_settings, screen, stats, ship, bullets, aliens, play_button
         screen.blit(bullet.image, bullet.rect)  # Tworzy obiekt wypełniony przez wskazany image
     ship.blitme()  # Wyświetlenie statku na ekranie, "nad" kolorem tła oraz nad pociskami
     aliens.draw(screen)  # Wyświetlenie obcego na ekranie
+    scoreboard.show_score()  # Wyświetlenie informacji o punktacji
     # Sprawdzenie czy gra nie jest aktywny, jeżeli nie jest to wyświetla przycisk Gra
     if not stats.game_active:
         play_button.draw_button()
