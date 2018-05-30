@@ -111,6 +111,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, 
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
             scoreboard.prep_score()
+        check_high_score(stats, scoreboard)
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
@@ -220,6 +221,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
         stats.game_active = False
         pygame.mouse.set_visible(True)
 
+
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     """Sprawdzenie, czy którykolwiek obcy dotarł do dolnej krawędzi ekranu."""
     screen_rect = screen.get_rect()
@@ -227,3 +229,10 @@ def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
         if alien.rect.bottom >= screen_rect.bottom:
             ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
             break
+
+
+def check_high_score(stats, scoreboard):
+    """Sprawdzenie, czy mamy nowy najlepszy wynik osiągnięty dotąd w grze"""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        scoreboard.prep_high_score()
