@@ -19,7 +19,9 @@ class Scoreboard():
 
     def prep_score(self):
         """Przekształcenie punktacji na wygenerowany obraz"""
-        score_str = str(self.stats.score)  # Przekształcamy wynik na string
+        rounded_scrore = int(round(self.stats.score, -1))  # Zaokrąglamy wynik do najbliższej wielokrotności czyli 10
+        score_str = '{:,}'.format(rounded_scrore)  # Przekazana wartość liczbowa zostanie oddzielona ',' po osiągnieciu
+                                                   # wartości 1000
         self.score_image = self.font.render(score_str, True, self.text_color)  # Renderujemy obraz punktacji
 
         # Wyświetlenie punktacji w prawym górnym rogu ekranu.
