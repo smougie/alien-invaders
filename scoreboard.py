@@ -18,6 +18,7 @@ class Scoreboard():
         # Przygotowanie początkowych obrazków z punktacją
         self.prep_score()
         self.prep_high_score()
+        self.prep_level()
 
     def prep_score(self):
         """Przekształcenie punktacji na wygenerowany obraz"""
@@ -43,7 +44,18 @@ class Scoreboard():
         self.high_score_rect.centerx = self.screen_rect.centerx
         self.high_score_rect.top = self.screen_rect.top
 
+    def prep_level(self):
+        """Konwersja numeru na wygenerowany obraz."""
+        self.level_image = self.font.render('LvL ' + str(self.stats.level), True, self.text_color_b)
+
+        # Poziom wyświetlany jest pod aktualną punktacją
+        self.level_rect = self.level_image.get_rect()
+        self.level_rect.right = self.score_rect.right
+        self.level_rect.top = self.score_rect.bottom + 10
+
+
     def show_score(self):
         """Wyświetlenie punktacji oraz najlepszego wyniku na ekranie."""
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
+        self.screen.blit(self.level_image, self.level_rect)
