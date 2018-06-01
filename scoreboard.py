@@ -19,9 +19,19 @@ class Scoreboard():
         self.prep_score()
         self.prep_high_score()
         self.prep_level()
+        self.prep_ships()
+
+    def prep_ships(self):
+        """Przekształcenie liczby życ/statków na wygenerowany obraz."""
+        ships = str(self.stats.ships_left)
+        self.ships_image = self.font.render(ships, True, self.text_color_b)
+
+        self.ships_rect = self.ships_image.get_rect()
+        self.ships_rect.left = self.screen_rect.left + 20
+        self.ships_rect.top = 20
 
     def prep_score(self):
-        """Przekształcenie punktacji na wygenerowany obraz"""
+        """Przekształcenie punktacji na wygenerowany obraz."""
         rounded_scrore = int(round(self.stats.score, -1))  # Zaokrąglamy wynik do najbliższej wielokrotności czyli 10
         score_str = '{:,}'.format(rounded_scrore)  # Przekazana wartość liczbowa zostanie oddzielona ',' po osiągnieciu
                                                    # wartości 1,000

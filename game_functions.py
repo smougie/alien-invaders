@@ -126,7 +126,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, 
 
         # Inkrementacja wartości poziomu
         stats.level += 1
-        scoreboard.pref_level()
+        scoreboard.prep_level()
 
 
 def fire_bullet(bullets, ai_settings, screen, ship):
