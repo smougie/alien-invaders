@@ -38,7 +38,7 @@ def run_game():
             # usuwa pociski znajdujące się poza ekranem, odpowiada za utworzenie nowej nowej floty po zniszczeniu
             # wszystkich obcych
 
-            update_aliens(ai_settings, stats, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
+            update_aliens(ai_settings, stats, scoreboard, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
             # oraz kierunek poruszania
 
         # Uaktualnienie obrazów i przejście do nowego ekranu
