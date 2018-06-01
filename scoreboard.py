@@ -23,12 +23,17 @@ class Scoreboard():
 
     def prep_ships(self):
         """Przekształcenie liczby życ/statków na wygenerowany obraz."""
-        ships = str(self.stats.ships_left)
-        self.ships_image = self.font.render(ships, True, self.text_color_b)
+        ships = ":" + str(self.stats.ships_left)
+        self.ships_value = self.font.render(ships, True, self.text_color_b)
 
-        self.ships_rect = self.ships_image.get_rect()
-        self.ships_rect.left = self.screen_rect.left + 20
-        self.ships_rect.top = 20
+        self.ships_value_rect = self.ships_value.get_rect()
+        self.ships_value_rect.left = self.screen_rect.left + 70
+        self.ships_value_rect.top = 20
+
+        self.ships_image = pygame.image.load('images/ships_left.png').convert_alpha()
+        self.ships_image_rect = self.ships_image.get_rect()
+        self.ships_image_rect.left = self.screen_rect.left + 20
+        self.ships_image_rect.top = 20
 
     def prep_score(self):
         """Przekształcenie punktacji na wygenerowany obraz."""
@@ -69,4 +74,5 @@ class Scoreboard():
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
-        self.screen.blit(self.ships_image, self.ships_rect)
+        self.screen.blit(self.ships_value, self.ships_value_rect)
+        self.screen.blit(self.ships_image, self.ships_image_rect)
