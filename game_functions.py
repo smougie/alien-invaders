@@ -2,15 +2,11 @@ import sys
 from time import sleep
 
 import pygame
-
-import background
-import game_stats
-import scoreboard
 from alien import Alien
 from bullet import Bullet
 
 
-def check_events(ai_settings, screen, stats, scoreboard, play_button, ship, aliens, bullets):
+def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets):
     """Funkcja nasłuchuje zdarzeń podczas pętli."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  # Jeżeli gracz naciśnie X w prawym górnym rogu, następuje zamknięcie okna
@@ -18,7 +14,7 @@ def check_events(ai_settings, screen, stats, scoreboard, play_button, ship, alie
         elif event.type == pygame.MOUSEBUTTONDOWN:  # Jeżeli gracz naciśnie przycisk myszki, wykonuje
             mouse_x,  mouse_y = pygame.mouse.get_pos()  # Sprawdzenie pozycji x, y kursora
             # Przekazujemy wartości x, y kursora do funckji
-            check_play_buttons(ai_settings, screen, stats, scoreboard, play_button, ship, aliens, bullets, mouse_x,
+            check_play_buttons(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x,
                                mouse_y)
         elif event.type == pygame.KEYDOWN:  # Jeżeli zostanie wciśnięty klawisz
             check_keydown_events(event, ai_settings, screen, ship, bullets)
@@ -26,7 +22,7 @@ def check_events(ai_settings, screen, stats, scoreboard, play_button, ship, alie
             check_keyup_events(event, ai_settings, screen, ship, bullets)
 
 
-def check_play_buttons(ai_settings, screen, stats, scoreboard, play_button, ship, aliens, bullets, mouse_x, mouse_y):
+def check_play_buttons(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y):
     """Rozpoczęcie nowej gry po kliknięciu przycisku - jeżeli funkcja wykryje, kliknięcie kursora w miejscu wyświetlenia
        przycisku Gra oraz obecnie gra jest nieakwywna, następuje zresetowanie danych statystycznych gry ora opróżnienie
        grup aliens i bullets, następnie zmiana wartości game_active z False na True"""
@@ -37,9 +33,9 @@ def check_play_buttons(ai_settings, screen, stats, scoreboard, play_button, ship
         stats.game_active = True
 
         # Wyzerowanie obrazów tablicy wyników
-        scoreboard.prep_score()
-        scoreboard.prep_high_score()
-        scoreboard.prep_level()
+        sb.prep_score()
+        sb.prep_high_score()
+        sb.prep_level()
 
         # Usunięcie zawartości list aliens i bullets
         aliens.empty()
@@ -70,7 +66,7 @@ def check_keyup_events(event, ai_settings, screen, ship, bullets):
         ship.moving_left = False  # Zmienia wartość moving_left w obiekcie klasy Ship() na False
 
 
-def update_screen(ai_settings, screen, stats, scoreboard, ship, bullets, aliens, play_button, background):
+def update_screen(ai_settings, screen, stats, sb, ship, bullets, aliens, play_button, background):
     """Uaktualnienie obrazów na ekranie i przejście do nowego ekranu."""
     screen.fill(ai_settings.bg_color)  # Wypełnienie tła przy użyciu klasy obiektu klasy Settings()
     screen.blit(background.image, background.rect)
@@ -81,7 +77,7 @@ def update_screen(ai_settings, screen, stats, scoreboard, ship, bullets, aliens,
         screen.blit(bullet.image, bullet.rect)  # Tworzy obiekt wypełniony przez wskazany image
     ship.blitme()  # Wyświetlenie statku na ekranie, "nad" kolorem tła oraz nad pociskami
     aliens.draw(screen)  # Wyświetlenie obcego na ekranie
-    scoreboard.show_score()  # Wyświetlenie informacji o punktacji
+    sb.show_score()  # Wyświetlenie informacji o punktacji
     # Sprawdzenie czy gra nie jest aktywny, jeżeli nie jest to wyświetla przycisk Gra
     if not stats.game_active:
         play_button.draw_button()
@@ -94,7 +90,7 @@ def update_alien(aliens):
     aliens.update()
 
 
-def update_bullets(ai_settings, screen, stats, scoreboard, ship, bullets, aliens):
+def update_bullets(ai_settings, screen, stats, sb, ship, bullets, aliens):
     """Uaktualnienie pocisków."""
     bullets.update()
 
@@ -103,10 +99,10 @@ def update_bullets(ai_settings, screen, stats, scoreboard, ship, bullets, aliens
         if bullet.rect.bottom <= 0:  # Jeżeli dolna krawędź bullet <= 0
             bullets.remove(bullet)
 
-    check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, bullets, aliens)
+    check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, bullets, aliens)
 
 
-def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, bullets, aliens):
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, bullets, aliens):
     '''Reakcja na kolizję pocisku z obcym.
        Wywołanie metody update dla grupy bullets wywołuje update dla każdego sprite'a w grupie.
        collisions - powoduje przeprowadzenie iteracji przez wszystkie pociski oraz przez wszystkich obcych, jeżeli
@@ -117,8 +113,8 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, 
     if collisions:
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
-            scoreboard.prep_score()
-        check_high_score(stats, scoreboard)
+            sb.prep_score()
+        check_high_score(stats, sb)
 
     if len(aliens) == 0:  # Sprawdzany ilość obcych na ekranie
         bullets.empty()  # Usuwamy wszystkie pociski
@@ -127,7 +123,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, scoreboard, ship, 
 
         # Inkrementacja wartości poziomu
         stats.level += 1
-        scoreboard.prep_level()
+        sb.prep_level()
 
 
 def fire_bullet(bullets, ai_settings, screen, ship):
@@ -198,22 +194,22 @@ def change_fleet_direction(ai_settings, aliens):
         alien.rect.y += ai_settings.fleet_drop_speed
     ai_settings.fleet_direction *= -1
 
-def update_aliens(ai_settings, stats, scoreboard, screen, aliens, ship, bullets):
+def update_aliens(ai_settings, stats, sb, screen, aliens, ship, bullets):
     """Sprawdzenie czy flota znajduje się przy bocznej krwędzi ekranu, następnie uaktualnienie położenia wszystkich
        obcych, sprawdzenie czy obcy nie zderzył się ze statkiem gracza lub z dolną krawędzią ekranu."""
     check_fleet_edges(ai_settings, aliens)  # Sprawdzenie położenia floty
     aliens.update()  # Uaktualnienie floty
     if pygame.sprite.spritecollideany(ship, aliens):  # Wykrywanie kolizji między obcymi a statkiem gracza
-        ship_hit(ai_settings, stats, scoreboard, screen, ship, aliens, bullets)
-    check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)  # Sprawdzenie czy obcy nie dotarł do dolnej
+        ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets)  # Sprawdzenie czy obcy nie dotarł do dolnej
     # krawędzi ekranu
 
 
-def ship_hit(ai_settings, stats, scoreboard, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets):
     """Reajcha na uderzenie obcego w statek."""
     if stats.ships_left > 0:
         stats.ships_left -= 1  # Zmniejszego wartości przechowywanej w ships_left - jedno żytko mniej ;)
-        scoreboard.prep_ships()
+        sb.prep_ships()
         # Usunięcie wszystkich obcych oraz pocisków
         aliens.empty()
         bullets.empty()
@@ -232,17 +228,17 @@ def ship_hit(ai_settings, stats, scoreboard, screen, ship, aliens, bullets):
         pygame.mouse.set_visible(True)
 
 
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets):
     """Sprawdzenie, czy którykolwiek obcy dotarł do dolnej krawędzi ekranu."""
     screen_rect = screen.get_rect()
     for alien in aliens:
         if alien.rect.bottom >= screen_rect.bottom:
-            ship_hit(ai_settings, stats, scoreboard, screen, ship, aliens, bullets)
+            ship_hit(ai_settings, stats, sb, screen, ship, aliens, bullets)
             break
 
 
-def check_high_score(stats, scoreboard):
+def check_high_score(stats, sb):
     """Sprawdzenie, czy mamy nowy najlepszy wynik osiągnięty dotąd w grze"""
     if stats.score > stats.high_score:
         stats.high_score = stats.score
-        scoreboard.prep_high_score()
+        sb.prep_high_score()

@@ -21,7 +21,7 @@ def run_game():
     background = Background(ai_settings)  # Utworzenie tła
     play_button = Button(ai_settings, screen, 'Gra')  # Utworzenie przycisku Gra na środku ekranu
     stats = GameStats(ai_settings)  # Utworzenie obiektu klasy GameStats do przechowywania danych statystycznych gry
-    scoreboard = Scoreboard(ai_settings, screen, stats)  # Obiektu klasy Scoreboard odpowiedzialmy za punktacje
+    sb = Scoreboard(ai_settings, screen, stats)  # Obiektu klasy Scoreboard odpowiedzialmy za punktacje
     ship = Ship(screen, ai_settings)  # Tworzymy obiekt klasy Ship()
     bullets = Group()  # Grupa przeznaczona do przechowywania pocisków
     aliens = Group()  # Grupa przeznaczona do przechowywania obcych
@@ -31,18 +31,18 @@ def run_game():
     while True:
 
         # Moduły odpowiedzialne za odświeżanie ekranu po każdej iteracji pętli.
-        check_events(ai_settings, screen, stats, scoreboard, play_button, ship, aliens, bullets)  # Nasłuchuje eventów
+        check_events(ai_settings, screen, stats, sb, play_button, ship, aliens, bullets)  # Nasłuchuje eventów
         if stats.game_active:
             ship.update()  # Uaktualnia położenie statku
-            update_bullets(ai_settings, screen, stats, scoreboard, ship, bullets, aliens)  # Uaktualnia pociski oraz
+            update_bullets(ai_settings, screen, stats, sb, ship, bullets, aliens)  # Uaktualnia pociski oraz
             # usuwa pociski znajdujące się poza ekranem, odpowiada za utworzenie nowej nowej floty po zniszczeniu
             # wszystkich obcych
 
-            update_aliens(ai_settings, stats, scoreboard, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
+            update_aliens(ai_settings, stats, sb, screen, aliens, ship, bullets)  # Uaktualnie flotę obcych, ustala położenie
             # oraz kierunek poruszania
 
         # Uaktualnienie obrazów i przejście do nowego ekranu
-        update_screen(ai_settings, screen, stats, scoreboard, ship, bullets, aliens, play_button, background)
+        update_screen(ai_settings, screen, stats, sb, ship, bullets, aliens, play_button, background)
 
 
 run_game()

@@ -38,7 +38,7 @@ class Settings():
         """Inicjalizacja ustawień, które ulegają zmianie w trakcie gry."""
         self.ship_speed_factor = 6
         self.bullet_speed_factor = 6
-        self.alien_speed_factor = 2
+        self.alien_speed_factor = 30
 
         # Wartośc fleet_direction wynosząca 1 oznacza prawo, natomiast -1 oznacza lewo
 
