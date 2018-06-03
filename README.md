@@ -6,6 +6,7 @@ Alien Invaders is a game where player control his ship and his job is destroying
 - Player has 3 lives/ships.
 - When alien touch bottom side of screen OR alien hit player ship game will feeeze for short time and player will lose 1 ship.
 - After destroying whole aliens on screen, new fleet will appear and the game speed will rise.
+- Game will start after pressing 'Gra' buttom in the middle of the screen.
 
 
 ### TO DO
@@ -19,6 +20,3 @@ Alien Invaders is a game where player control his ship and his job is destroying
 4. Install all required packages with: pip install -r requirements.txt
 5. Run alien_invaders.py
 ```
-
-### Basic information
-Player has three lives/ships, can fire maximum three bullets, game starts after pressing "Gra" button.
